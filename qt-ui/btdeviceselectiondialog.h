@@ -14,6 +14,12 @@ public:
     explicit BtDeviceSelectionDialog(QWidget *parent = 0);
     ~BtDeviceSelectionDialog();
 
+private slots:
+    void on_changeDeviceState_clicked();
+    void on_save_clicked();
+    void on_clear_clicked();
+    void on_scan_clicked();
+
 private:
     Ui::BtDeviceSelectionDialog *ui;
 };
