@@ -526,6 +526,11 @@ void DownloadFromDCWidget::selectRemoteBluetoothDevice()
 {
     qWarning() << "Selecting a remote Bluetooth device...";
     //TODO add implementation
+    if (!btDeviceSelectionDialog) {
+       btDeviceSelectionDialog = new BtDeviceSelectionDialog(this);
+    }
+
+    btDeviceSelectionDialog->show();
 }
 
 void DownloadFromDCWidget::enableBluetoothMode(int state)

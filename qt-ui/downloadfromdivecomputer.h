@@ -10,6 +10,7 @@
 #include "libdivecomputer.h"
 #include "configuredivecomputerdialog.h"
 #include "ui_downloadfromdivecomputer.h"
+#include "btdeviceselectiondialog.h"
 
 class QStringListModel;
 
@@ -106,6 +107,7 @@ private:
 	bool dumpWarningShown;
 	OstcFirmwareCheck *ostcFirmwareCheck;
 	DiveImportedModel *diveImportedModel;
+    BtDeviceSelectionDialog *btDeviceSelectionDialog;
 
 public:
 	bool preferDownloaded();

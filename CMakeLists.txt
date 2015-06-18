@@ -317,6 +317,7 @@ source_group("Subsurface Models" FILES ${SUBSURFACE_MODELS})
 set(SUBSURFACE_INTERFACE
 	qt-ui/updatemanager.cpp
 	qt-ui/about.cpp
+	qt-ui/btdeviceselectiondialog.cpp
 	qt-ui/divecomputermanagementdialog.cpp
 	qt-ui/divelistview.cpp
 	qt-ui/diveplanner.cpp

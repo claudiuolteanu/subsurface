@@ -1,19 +1,3 @@
-message(" ")
-message(" ")
-message("qmake support will soon be removed from Subsurface")
-message("if you haven't switched to cmake, yet, please consider doing so")
-message("if this isn't possible for some reason, please let the mailing list know")
-message(" ")
-message(" ")
-message(" ")
-message(" ")
-message("you can still use qmake by removing the error statement below")
-message("simply edit $${PWD}/subsurface.pro")
-#
-# remove the following if you still need to use qmake
-#
-error(1)
-
 CODECFORTR = UTF-8
 CODECFORSRC = UTF-8
 include(subsurface-configure.pri)
@@ -70,6 +54,7 @@ HEADERS = \
 	templatelayout.h \
 	printer.h \
 	qt-ui/about.h \
+        qt-ui/btdeviceselectiondialog.h \
 	qt-ui/completionmodels.h \
 	qt-ui/divecomputermanagementdialog.h \
 	qt-ui/divelistview.h \
@@ -131,7 +116,7 @@ HEADERS = \
 	qt-ui/diveshareexportdialog.h \
 	qt-ui/filtermodels.h \
 	qt-ui/undocommands.h \
-	qt-ui/notificationwidget.h
+        qt-ui/notificationwidget.h
 
 android: HEADERS -= \
 	qt-ui/usermanual.h \
@@ -169,6 +154,7 @@ SOURCES =  \
 	qt-gui.cpp \
 	qthelper.cpp \
 	qt-ui/about.cpp \
+        qt-ui/btdeviceselectiondialog.cpp \
 	qt-ui/completionmodels.cpp \
 	qt-ui/divecomputermanagementdialog.cpp \
 	qt-ui/divelistview.cpp \
@@ -234,7 +220,7 @@ SOURCES =  \
 	qt-ui/filtermodels.cpp \
 	qt-ui/undocommands.cpp \
 	qt-ui/notificationwidget.cpp \
-	ostctools.c
+        ostctools.c
 
 android: SOURCES += android.cpp
 else: win32: SOURCES += windows.c
@@ -249,6 +235,7 @@ android: SOURCES -= \
 
 FORMS = \
 	qt-ui/about.ui \
+        qt-ui/btdeviceselectiondialog.ui \
 	qt-ui/divecomputermanagementdialog.ui \
 	qt-ui/diveplanner.ui \
 	qt-ui/downloadfromdivecomputer.ui \
@@ -274,7 +261,7 @@ FORMS = \
 	qt-ui/filterwidget.ui \
 	qt-ui/plannerDetails.ui \
 	qt-ui/urldialog.ui \
-	qt-ui/locationInformation.ui
+	qt-ui/locationInformation.ui \
 
 # Nether usermanual or printing is supported on android right now
 android: FORMS -= qt-ui/printoptions.ui
