@@ -143,7 +143,10 @@
        <widget class="QLineEdit" name="deviceAddress"/>
       </item>
       <item row="2" column="1">
-       <widget class="QCheckBox" name="checkBox">
+       <widget class="QCheckBox" name="deviceState">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -160,7 +163,7 @@
          <string>Bluetooth powered on</string>
         </property>
         <property name="checkable">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
        </widget>
       </item>
