@@ -52,11 +52,13 @@ BtDeviceSelectionDialog::~BtDeviceSelectionDialog()
 
 void BtDeviceSelectionDialog::on_changeDeviceState_clicked()
 {
-    qDebug() << "Change device state "<< localDevice->hostMode();
-    if (localDevice->hostMode() == QBluetoothLocalDevice::HostPoweredOff)
+    if (localDevice->hostMode() == QBluetoothLocalDevice::HostPoweredOff) {
+        ui->dialogStatus->setText("Trying to turn on the local Bluetooth device...");
         localDevice->powerOn();
-    else
+    } else {
+        ui->dialogStatus->setText("Trying to turn off the local Bluetooth device...");
         localDevice->setHostMode(QBluetoothLocalDevice::HostPoweredOff);
+    }
 }
 
 void BtDeviceSelectionDialog::on_save_clicked()
@@ -67,20 +69,20 @@ void BtDeviceSelectionDialog::on_save_clicked()
 
 void BtDeviceSelectionDialog::on_clear_clicked()
 {
-    qDebug() << "Cleaning the list";
+    ui->dialogStatus->setText("Remote devices list was cleaned.");
     ui->discoveredDevicesList->clear();
 }
 
 void BtDeviceSelectionDialog::on_scan_clicked()
 {
-    qDebug() << "Starting the scan";
+    ui->dialogStatus->setText("Scanning for remote devices...");
     remoteDeviceDiscoveryAgent->start();
     ui->scan->setEnabled(false);
 }
 
 void BtDeviceSelectionDialog::remoteDeviceScanFinished()
 {
-    qDebug() << "The scan finished";
+    ui->dialogStatus->setText("Scanning finished.");
     ui->scan->setEnabled(true);
 }
 
@@ -88,6 +90,7 @@ void BtDeviceSelectionDialog::hostModeStateChanged(QBluetoothLocalDevice::HostMo
 {
     bool on = !(mode == QBluetoothLocalDevice::HostPoweredOff);
 
+    ui->dialogStatus->setText(QString("The local Bluetooth device was turned %1.").arg(on? "ON" : "OFF"));
     ui->deviceState->setChecked(on);
     ui->scan->setEnabled(on);
 }
