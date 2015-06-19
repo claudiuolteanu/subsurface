@@ -99,7 +99,7 @@ void BtDeviceSelectionDialog::addRemoteDevice(const QBluetoothDeviceInfo &remote
 {
     //TODO use a QTableView
     QString deviceLable = QString("%1  (%2)").arg(remoteDeviceInfo.name()).arg(remoteDeviceInfo.address().toString());
-    QList<QListWidgetItem *> itemsWithSameSignature = ui->discoveredDevicesList->findItems(deviceLable, Qt::MatchExactly);
+    QList<QListWidgetItem *> itemsWithSameSignature = ui->discoveredDevicesList->findItems(deviceLable, Qt::MatchStartsWith);
 
     /* Check if the remote device is already in the list */
     if (itemsWithSameSignature.empty()) {
@@ -107,14 +107,16 @@ void BtDeviceSelectionDialog::addRemoteDevice(const QBluetoothDeviceInfo &remote
         QBluetoothLocalDevice::Pairing pairingStatus = localDevice->pairingStatus(remoteDeviceInfo.address());
 
         if (pairingStatus == QBluetoothLocalDevice::Paired) {
+            item->setText(QString("%1   [State: PAIRED]").arg(item->text()));
             item->setBackgroundColor(QColor(Qt::gray));
         } else if (pairingStatus == QBluetoothLocalDevice::AuthorizedPaired) {
+            item->setText(QString("%1   [State: AUTHORIZED_PAIRED]").arg(item->text()));
             item->setBackgroundColor(QColor(Qt::blue));
         } else {
+            item->setText(QString("%1   [State: UNPAIRED]").arg(item->text()));
             item->setTextColor(QColor(Qt::black));
         }
 
-        qDebug() << item->text();
         ui->discoveredDevicesList->addItem(item);
     }
 }
