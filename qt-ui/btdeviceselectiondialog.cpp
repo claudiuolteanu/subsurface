@@ -32,6 +32,13 @@ BtDeviceSelectionDialog::BtDeviceSelectionDialog(QWidget *parent) :
 
     // Initialize the state of the local device and activate/deactive the scan button
     hostModeStateChanged(localDevice->hostMode());
+
+    // Intialize the discovery agent
+    remoteDeviceDiscoveryAgent = new QBluetoothDeviceDiscoveryAgent();
+
+    connect(remoteDeviceDiscoveryAgent, SIGNAL(deviceDiscovered(QBluetoothDeviceInfo)),
+            this, SLOT(addRemoteDevice(QBluetoothDeviceInfo)));
+    connect(remoteDeviceDiscoveryAgent, SIGNAL(finished()), this, SLOT(remoteDeviceScanFinished()));
 }
 
 BtDeviceSelectionDialog::~BtDeviceSelectionDialog()
@@ -58,22 +65,49 @@ void BtDeviceSelectionDialog::on_clear_clicked()
 {
     qDebug() << "Cleaning the list";
     ui->discoveredDevicesList->clear();
-    ui->scan->setEnabled(true);
 }
 
 void BtDeviceSelectionDialog::on_scan_clicked()
 {
     qDebug() << "Starting the scan";
-    ui->discoveredDevicesList->addItem("Device 1");
-    ui->discoveredDevicesList->addItem("Device 2");
+    remoteDeviceDiscoveryAgent->start();
     ui->scan->setEnabled(false);
 }
 
+void BtDeviceSelectionDialog::remoteDeviceScanFinished()
+{
+    qDebug() << "The scan finished";
+    ui->scan->setEnabled(true);
+}
 
 void BtDeviceSelectionDialog::hostModeStateChanged(QBluetoothLocalDevice::HostMode mode)
 {
     bool on = !(mode == QBluetoothLocalDevice::HostPoweredOff);
-    qDebug() << "Device mode " << on;
+
     ui->deviceState->setChecked(on);
     ui->scan->setEnabled(on);
+}
+
+void BtDeviceSelectionDialog::addRemoteDevice(const QBluetoothDeviceInfo &remoteDeviceInfo)
+{
+    //TODO use a QTableView
+    QString deviceLable = QString("%1  (%2)").arg(remoteDeviceInfo.name()).arg(remoteDeviceInfo.address().toString());
+    QList<QListWidgetItem *> itemsWithSameSignature = ui->discoveredDevicesList->findItems(deviceLable, Qt::MatchExactly);
+
+    /* Check if the remote device is already in the list */
+    if (itemsWithSameSignature.empty()) {
+        QListWidgetItem *item = new QListWidgetItem(deviceLable);
+        QBluetoothLocalDevice::Pairing pairingStatus = localDevice->pairingStatus(remoteDeviceInfo.address());
+
+        if (pairingStatus == QBluetoothLocalDevice::Paired) {
+            item->setBackgroundColor(QColor(Qt::gray));
+        } else if (pairingStatus == QBluetoothLocalDevice::AuthorizedPaired) {
+            item->setBackgroundColor(QColor(Qt::blue));
+        } else {
+            item->setTextColor(QColor(Qt::black));
+        }
+
+        qDebug() << item->text();
+        ui->discoveredDevicesList->addItem(item);
+    }
 }
