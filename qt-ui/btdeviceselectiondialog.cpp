@@ -10,7 +10,7 @@ BtDeviceSelectionDialog::BtDeviceSelectionDialog(QWidget *parent) :
     localDevice(new QBluetoothLocalDevice),
     ui(new Ui::BtDeviceSelectionDialog)
 {
-    // Check if Bluetooth is available on this device
+    /* Check if Bluetooth is available on this device */
     if (!localDevice->isValid()) {
         QMessageBox::warning(this, tr("Warning"),
                      "Your local Bluetooth device cannot be accessed. Please check if you have installed qtconnectivity library.");
@@ -19,26 +19,30 @@ BtDeviceSelectionDialog::BtDeviceSelectionDialog(QWidget *parent) :
 
     ui->setupUi(this);
 
-    /* quit button callbacks*/
+    /* Quit button callbacks*/
     QShortcut *quit = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this);
     connect(quit, SIGNAL(activated()), this, SLOT(close()));
     connect(ui->quit, SIGNAL(clicked()), this, SLOT(close()));
 
-    // Add context menu for devices to be able to pair device
-    ui->discoveredDevicesList->setContextMenuPolicy(Qt::CustomContextMenu);
+    /* Set UI information about the local device */
+    ui->deviceAddress->setText(localDevice->address().toString());
+    ui->deviceName->setText(localDevice->name());
 
     connect(localDevice, SIGNAL(hostModeStateChanged(QBluetoothLocalDevice::HostMode)),
             this, SLOT(hostModeStateChanged(QBluetoothLocalDevice::HostMode)));
 
-    // Initialize the state of the local device and activate/deactive the scan button
+    /* Initialize the state of the local device and activate/deactive the scan button */
     hostModeStateChanged(localDevice->hostMode());
 
-    // Intialize the discovery agent
+    /* Intialize the discovery agent */
     remoteDeviceDiscoveryAgent = new QBluetoothDeviceDiscoveryAgent();
 
     connect(remoteDeviceDiscoveryAgent, SIGNAL(deviceDiscovered(QBluetoothDeviceInfo)),
             this, SLOT(addRemoteDevice(QBluetoothDeviceInfo)));
     connect(remoteDeviceDiscoveryAgent, SIGNAL(finished()), this, SLOT(remoteDeviceScanFinished()));
+
+    /* Add context menu for devices to be able to pair device */
+    ui->discoveredDevicesList->setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
 BtDeviceSelectionDialog::~BtDeviceSelectionDialog()
