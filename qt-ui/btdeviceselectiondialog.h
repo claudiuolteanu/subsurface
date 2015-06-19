@@ -2,9 +2,12 @@
 #define BTDEVICESELECTIONDIALOG_H
 
 #include <QDialog>
+#include <QListWidgetItem>
 #include <QtBluetooth/QBluetoothLocalDevice>
 #include <QtBluetooth/qbluetoothglobal.h>
 #include <QtBluetooth/QBluetoothDeviceDiscoveryAgent>
+
+Q_DECLARE_METATYPE(QBluetoothDeviceInfo)
 
 namespace Ui {
     class BtDeviceSelectionDialog;
@@ -25,6 +28,7 @@ private slots:
     void remoteDeviceScanFinished();
     void hostModeStateChanged(QBluetoothLocalDevice::HostMode);
     void addRemoteDevice(const QBluetoothDeviceInfo &remoteDeviceInfo);
+    void itemActivated(QListWidgetItem *item);
 
 private:
     Ui::BtDeviceSelectionDialog *ui;
