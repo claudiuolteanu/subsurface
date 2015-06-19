@@ -7,7 +7,7 @@ QT = core gui network svg
 lessThan(QT_MAJOR_VERSION, 5) {
 	QT += webkit
 } else {
-	QT += printsupport concurrent
+        QT += printsupport concurrent bluetooth
 	!android: QT += webkitwidgets webkit
 	android: QT += androidextras
 }
