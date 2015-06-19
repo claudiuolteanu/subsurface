@@ -1,6 +1,7 @@
 #include <QShortcut>
 #include <QDebug>
 #include <QMessageBox>
+#include <QMenu>
 
 #include "ui_btdeviceselectiondialog.h"
 #include "btdeviceselectiondialog.h"
@@ -49,6 +50,7 @@ BtDeviceSelectionDialog::BtDeviceSelectionDialog(QWidget *parent) :
 
     /* Add context menu for devices to be able to pair device */
     ui->discoveredDevicesList->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->discoveredDevicesList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(displayPairingMenu(QPoint)));
 }
 
 BtDeviceSelectionDialog::~BtDeviceSelectionDialog()
@@ -134,13 +136,38 @@ void BtDeviceSelectionDialog::itemActivated(QListWidgetItem *item)
     QBluetoothDeviceInfo remoteDeviceInfo = item->data(Qt::UserRole).value<QBluetoothDeviceInfo>();
     QBluetoothLocalDevice::Pairing pairingStatus = localDevice->pairingStatus(remoteDeviceInfo.address());
 
-    if (pairingStatus != QBluetoothLocalDevice::Unpaired) {
+    if (pairingStatus == QBluetoothLocalDevice::Unpaired) {
+        ui->dialogStatus->setText("The device must be paired in order to be used. Please use the context menu for pairing options.");
+        ui->save->setEnabled(false);
+    } else {
         ui->dialogStatus->setText(QString("The device %1 can be used for connection. You can press the Save button.")
                                   .arg(remoteDeviceInfo.address().toString()));
         ui->save->setEnabled(true);
+    }
+}
+
+void BtDeviceSelectionDialog::displayPairingMenu(const QPoint &pos)
+{
+    QMenu menu(this);
+    QAction *pairAction = menu.addAction("Pair");
+    QAction *removePairAction = menu.addAction("Remove Pairing");
+    QAction *chosenAction = menu.exec(ui->discoveredDevicesList->viewport()->mapToGlobal(pos));
+    QListWidgetItem *currentItem = ui->discoveredDevicesList->currentItem();
+    QBluetoothDeviceInfo currentRemoteDeviceInfo = currentItem->data(Qt::UserRole).value<QBluetoothDeviceInfo>();
+    QBluetoothLocalDevice::Pairing pairingStatus = localDevice->pairingStatus(currentRemoteDeviceInfo.address());
+
+    //TODO: disable the actions
+    if (pairingStatus == QBluetoothLocalDevice::Unpaired) {
+        pairAction->setEnabled(true);
+        removePairAction->setEnabled(false);
     } else {
-        ui->dialogStatus->setText("The device must be paired in order to be used. Please use the context menu for pairing options.");
-        ui->save->setEnabled(false);
+        pairAction->setEnabled(false);
+        removePairAction->setEnabled(true);
     }
 
+    if (chosenAction == pairAction) {
+        localDevice->requestPairing(currentRemoteDeviceInfo.address(), QBluetoothLocalDevice::Paired);
+    } else if (chosenAction == removePairAction) {
+        localDevice->requestPairing(currentRemoteDeviceInfo.address(), QBluetoothLocalDevice::Unpaired);
+    }
 }

@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QListWidgetItem>
+#include <QPointer>
 #include <QtBluetooth/QBluetoothLocalDevice>
 #include <QtBluetooth/qbluetoothglobal.h>
 #include <QtBluetooth/QBluetoothDeviceDiscoveryAgent>
@@ -29,6 +30,7 @@ private slots:
     void hostModeStateChanged(QBluetoothLocalDevice::HostMode);
     void addRemoteDevice(const QBluetoothDeviceInfo &remoteDeviceInfo);
     void itemActivated(QListWidgetItem *item);
+    void displayPairingMenu(const QPoint &pos);
 
 private:
     Ui::BtDeviceSelectionDialog *ui;
