@@ -77,6 +77,7 @@ void BtDeviceSelectionDialog::on_clear_clicked()
 {
     ui->dialogStatus->setText("Remote devices list was cleaned.");
     ui->discoveredDevicesList->clear();
+    ui->save->setEnabled(false);
 }
 
 void BtDeviceSelectionDialog::on_scan_clicked()
@@ -131,5 +132,15 @@ void BtDeviceSelectionDialog::addRemoteDevice(const QBluetoothDeviceInfo &remote
 void BtDeviceSelectionDialog::itemActivated(QListWidgetItem *item)
 {
     QBluetoothDeviceInfo remoteDeviceInfo = item->data(Qt::UserRole).value<QBluetoothDeviceInfo>();
-    qDebug() << remoteDeviceInfo.address().toString() << " " << remoteDeviceInfo.name();
+    QBluetoothLocalDevice::Pairing pairingStatus = localDevice->pairingStatus(remoteDeviceInfo.address());
+
+    if (pairingStatus != QBluetoothLocalDevice::Unpaired) {
+        ui->dialogStatus->setText(QString("The device %1 can be used for connection. You can press the Save button.")
+                                  .arg(remoteDeviceInfo.address().toString()));
+        ui->save->setEnabled(true);
+    } else {
+        ui->dialogStatus->setText("The device must be paired in order to be used. Please use the context menu for pairing options.");
+        ui->save->setEnabled(false);
+    }
+
 }
