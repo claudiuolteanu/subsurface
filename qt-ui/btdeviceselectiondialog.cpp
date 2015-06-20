@@ -76,6 +76,17 @@ void BtDeviceSelectionDialog::on_changeDeviceState_clicked()
 void BtDeviceSelectionDialog::on_save_clicked()
 {
     qDebug() << "Saving the selected device";
+
+    /* Get the selected device. There will be always a selected device if the save button is enabled. */
+    QListWidgetItem *currentItem = ui->discoveredDevicesList->currentItem();
+    qWarning() << "1";
+    QBluetoothDeviceInfo remoteDeviceInfo = currentItem->data(Qt::UserRole).value<QBluetoothDeviceInfo>();
+    qWarning() << "2";
+
+    /* Save the selected device */
+    selectedRemoteDeviceInfo = QSharedPointer<QBluetoothDeviceInfo>(new QBluetoothDeviceInfo(remoteDeviceInfo));
+
+    /* Close the device selection dialog */
     close();
 }
 

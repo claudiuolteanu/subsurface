@@ -37,6 +37,7 @@ private:
     Ui::BtDeviceSelectionDialog *ui;
     QBluetoothLocalDevice *localDevice;
     QBluetoothDeviceDiscoveryAgent *remoteDeviceDiscoveryAgent;
+    QSharedPointer<QBluetoothDeviceInfo> selectedRemoteDeviceInfo;
 };
 
 #endif // BTDEVICESELECTIONDIALOG_H
