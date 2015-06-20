@@ -49,7 +49,7 @@ BtDeviceSelectionDialog::BtDeviceSelectionDialog(QWidget *parent) :
     connect(remoteDeviceDiscoveryAgent, SIGNAL(finished()),
             this, SLOT(remoteDeviceScanFinished()));
 
-    /* Add context menu for devices to be able to pair device */
+    /* Add context menu for devices to be able to pair them */
     ui->discoveredDevicesList->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->discoveredDevicesList, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(displayPairingMenu(QPoint)));
