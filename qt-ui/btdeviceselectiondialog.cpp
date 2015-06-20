@@ -55,6 +55,9 @@ BtDeviceSelectionDialog::BtDeviceSelectionDialog(QWidget *parent) :
             this, SLOT(displayPairingMenu(QPoint)));
     connect(localDevice, SIGNAL(pairingFinished(QBluetoothAddress, QBluetoothLocalDevice::Pairing)),
             this, SLOT(pairingFinished(QBluetoothAddress, QBluetoothLocalDevice::Pairing)));
+
+    connect(localDevice, SIGNAL(error(QBluetoothLocalDevice::Error)),
+            this, SLOT(error(QBluetoothLocalDevice::Error)));
 }
 
 BtDeviceSelectionDialog::~BtDeviceSelectionDialog()
@@ -230,4 +233,10 @@ void BtDeviceSelectionDialog::pairingFinished(const QBluetoothAddress &address, 
             ui->save->setEnabled(false);
         }
     }
+}
+
+void BtDeviceSelectionDialog::error(QBluetoothLocalDevice::Error error)
+{
+    ui->dialogStatus->setText(QString("Local device error: %1.")
+                              .arg((error == QBluetoothLocalDevice::PairingError)? "Pairing error" : "Unknown error"));
 }

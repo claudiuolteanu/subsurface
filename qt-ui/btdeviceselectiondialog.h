@@ -32,6 +32,7 @@ private slots:
     void itemActivated(QListWidgetItem *item);
     void displayPairingMenu(const QPoint &pos);
     void pairingFinished(const QBluetoothAddress &address,QBluetoothLocalDevice::Pairing pairing);
+    void error(QBluetoothLocalDevice::Error error);
 
 private:
     Ui::BtDeviceSelectionDialog *ui;
