@@ -11,38 +11,38 @@
 Q_DECLARE_METATYPE(QBluetoothDeviceInfo)
 
 namespace Ui {
-    class BtDeviceSelectionDialog;
+	class BtDeviceSelectionDialog;
 }
 
 class BtDeviceSelectionDialog : public QDialog {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit BtDeviceSelectionDialog(QWidget *parent = 0);
-    ~BtDeviceSelectionDialog();
-    QString getSelectedDeviceAddress();
+	explicit BtDeviceSelectionDialog(QWidget *parent = 0);
+	~BtDeviceSelectionDialog();
+	QString getSelectedDeviceAddress();
 
 signals:
-    void selectedRemoteDeviceSaved(QString deviceAddress);
+	void selectedRemoteDeviceSaved(QString deviceAddress);
 
 private slots:
-    void on_changeDeviceState_clicked();
-    void on_save_clicked();
-    void on_clear_clicked();
-    void on_scan_clicked();
-    void remoteDeviceScanFinished();
-    void hostModeStateChanged(QBluetoothLocalDevice::HostMode mode);
-    void addRemoteDevice(const QBluetoothDeviceInfo &remoteDeviceInfo);
-    void itemActivated(QListWidgetItem *item);
-    void displayPairingMenu(const QPoint &pos);
-    void pairingFinished(const QBluetoothAddress &address,QBluetoothLocalDevice::Pairing pairing);
-    void error(QBluetoothLocalDevice::Error error);
+	void on_changeDeviceState_clicked();
+	void on_save_clicked();
+	void on_clear_clicked();
+	void on_scan_clicked();
+	void remoteDeviceScanFinished();
+	void hostModeStateChanged(QBluetoothLocalDevice::HostMode mode);
+	void addRemoteDevice(const QBluetoothDeviceInfo &remoteDeviceInfo);
+	void itemActivated(QListWidgetItem *item);
+	void displayPairingMenu(const QPoint &pos);
+	void pairingFinished(const QBluetoothAddress &address,QBluetoothLocalDevice::Pairing pairing);
+	void error(QBluetoothLocalDevice::Error error);
 
 private:
-    Ui::BtDeviceSelectionDialog *ui;
-    QBluetoothLocalDevice *localDevice;
-    QBluetoothDeviceDiscoveryAgent *remoteDeviceDiscoveryAgent;
-    QSharedPointer<QBluetoothDeviceInfo> selectedRemoteDeviceInfo;
+	Ui::BtDeviceSelectionDialog *ui;
+	QBluetoothLocalDevice *localDevice;
+	QBluetoothDeviceDiscoveryAgent *remoteDeviceDiscoveryAgent;
+	QSharedPointer<QBluetoothDeviceInfo> selectedRemoteDeviceInfo;
 };
 
 #endif // BTDEVICESELECTIONDIALOG_H

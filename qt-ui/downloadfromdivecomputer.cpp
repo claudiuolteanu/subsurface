@@ -100,9 +100,9 @@ DownloadFromDCWidget::DownloadFromDCWidget(QWidget *parent, Qt::WindowFlags f) :
 	ui.downloadCancelRetryButton->setEnabled(true);
 	ui.downloadCancelRetryButton->setText(tr("Download"));
 
-    ui.chooseBluetoothDevice->setEnabled(ui.bluetoothMode->isChecked());
-    connect(ui.bluetoothMode, SIGNAL(stateChanged(int)), this, SLOT(enableBluetoothMode(int)));
-    connect(ui.chooseBluetoothDevice, SIGNAL(clicked()), this, SLOT(selectRemoteBluetoothDevice()));
+	ui.chooseBluetoothDevice->setEnabled(ui.bluetoothMode->isChecked());
+	connect(ui.bluetoothMode, SIGNAL(stateChanged(int)), this, SLOT(enableBluetoothMode(int)));
+	connect(ui.chooseBluetoothDevice, SIGNAL(clicked()), this, SLOT(selectRemoteBluetoothDevice()));
 }
 
 void DownloadFromDCWidget::updateProgressBar()
@@ -497,8 +497,8 @@ void DownloadFromDCWidget::markChildrenAsDisabled()
 	ui.chooseDumpFile->setEnabled(false);
 	ui.selectAllButton->setEnabled(false);
 	ui.unselectAllButton->setEnabled(false);
-    ui.bluetoothMode->setEnabled(false);
-    ui.chooseBluetoothDevice->setEnabled(false);
+	ui.bluetoothMode->setEnabled(false);
+	ui.chooseBluetoothDevice->setEnabled(false);
 }
 
 void DownloadFromDCWidget::markChildrenAsEnabled()
@@ -518,33 +518,33 @@ void DownloadFromDCWidget::markChildrenAsEnabled()
 	ui.chooseDumpFile->setEnabled(true);
 	ui.selectAllButton->setEnabled(true);
 	ui.unselectAllButton->setEnabled(true);
-    ui.bluetoothMode->setEnabled(false);
-    ui.chooseBluetoothDevice->setEnabled(false);
+	ui.bluetoothMode->setEnabled(false);
+	ui.chooseBluetoothDevice->setEnabled(false);
 }
 
 void DownloadFromDCWidget::selectRemoteBluetoothDevice()
 {
-    if (!btDeviceSelectionDialog) {
-       btDeviceSelectionDialog = new BtDeviceSelectionDialog(this);
-       connect(btDeviceSelectionDialog, SIGNAL(selectedRemoteDeviceSaved(QString)),
-               this, SLOT(saveRemoteBluetoothDevice(QString)));
-    }
+	if (!btDeviceSelectionDialog) {
+		btDeviceSelectionDialog = new BtDeviceSelectionDialog(this);
+		connect(btDeviceSelectionDialog, SIGNAL(selectedRemoteDeviceSaved(QString)),
+			this, SLOT(saveRemoteBluetoothDevice(QString)));
+	}
 
-    btDeviceSelectionDialog->show();
+	btDeviceSelectionDialog->show();
 }
 
 void DownloadFromDCWidget::saveRemoteBluetoothDevice(QString deviceAddress)
 {
-    /* Make the selected Bluetooth device default */
-    ui.device->setCurrentText(deviceAddress);
+	/* Make the selected Bluetooth device default */
+	ui.device->setCurrentText(deviceAddress);
 }
 
 void DownloadFromDCWidget::enableBluetoothMode(int state)
 {
-    ui.chooseBluetoothDevice->setEnabled(state == Qt::Checked);
-    if (state == Qt::Checked) {
-        selectRemoteBluetoothDevice();
-    }
+	ui.chooseBluetoothDevice->setEnabled(state == Qt::Checked);
+	if (state == Qt::Checked) {
+		selectRemoteBluetoothDevice();
+	}
 }
 
 static void fillDeviceList(const char *name, void *data)

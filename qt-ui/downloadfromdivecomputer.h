@@ -78,11 +78,11 @@ slots:
 	void updateProgressBar();
 	void checkLogFile(int state);
 	void checkDumpFile(int state);
-    void enableBluetoothMode(int state);
+	void enableBluetoothMode(int state);
 	void pickDumpFile();
 	void pickLogFile();
-    void selectRemoteBluetoothDevice();
-    void saveRemoteBluetoothDevice(QString deviceAddress);
+	void selectRemoteBluetoothDevice();
+	void saveRemoteBluetoothDevice(QString deviceAddress);
 
 private:
 	void markChildrenAsDisabled();
@@ -108,7 +108,7 @@ private:
 	bool dumpWarningShown;
 	OstcFirmwareCheck *ostcFirmwareCheck;
 	DiveImportedModel *diveImportedModel;
-    BtDeviceSelectionDialog *btDeviceSelectionDialog;
+	BtDeviceSelectionDialog *btDeviceSelectionDialog;
 
 public:
 	bool preferDownloaded();
