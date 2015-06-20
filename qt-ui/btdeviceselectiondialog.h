@@ -20,6 +20,10 @@ class BtDeviceSelectionDialog : public QDialog {
 public:
     explicit BtDeviceSelectionDialog(QWidget *parent = 0);
     ~BtDeviceSelectionDialog();
+    QString getSelectedDeviceAddress();
+
+signals:
+    void selectedRemoteDeviceSaved(QString deviceAddress);
 
 private slots:
     void on_changeDeviceState_clicked();

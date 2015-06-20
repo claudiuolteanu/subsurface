@@ -82,12 +82,13 @@ void BtDeviceSelectionDialog::on_save_clicked()
 
     /* Get the selected device. There will be always a selected device if the save button is enabled. */
     QListWidgetItem *currentItem = ui->discoveredDevicesList->currentItem();
-    qWarning() << "1";
     QBluetoothDeviceInfo remoteDeviceInfo = currentItem->data(Qt::UserRole).value<QBluetoothDeviceInfo>();
-    qWarning() << "2";
 
     /* Save the selected device */
     selectedRemoteDeviceInfo = QSharedPointer<QBluetoothDeviceInfo>(new QBluetoothDeviceInfo(remoteDeviceInfo));
+
+    /* Emit the signal */
+    emit selectedRemoteDeviceSaved(getSelectedDeviceAddress());
 
     /* Close the device selection dialog */
     close();
@@ -239,4 +240,13 @@ void BtDeviceSelectionDialog::error(QBluetoothLocalDevice::Error error)
 {
     ui->dialogStatus->setText(QString("Local device error: %1.")
                               .arg((error == QBluetoothLocalDevice::PairingError)? "Pairing error" : "Unknown error"));
+}
+
+QString BtDeviceSelectionDialog::getSelectedDeviceAddress()
+{
+    if (selectedRemoteDeviceInfo) {
+        return selectedRemoteDeviceInfo.data()->address().toString();
+    }
+
+    return QString();
 }

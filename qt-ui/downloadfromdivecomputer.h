@@ -82,6 +82,7 @@ slots:
 	void pickDumpFile();
 	void pickLogFile();
     void selectRemoteBluetoothDevice();
+    void saveRemoteBluetoothDevice(QString deviceAddress);
 
 private:
 	void markChildrenAsDisabled();

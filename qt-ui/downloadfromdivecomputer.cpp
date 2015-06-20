@@ -524,13 +524,19 @@ void DownloadFromDCWidget::markChildrenAsEnabled()
 
 void DownloadFromDCWidget::selectRemoteBluetoothDevice()
 {
-    qWarning() << "Selecting a remote Bluetooth device...";
-    //TODO add implementation
     if (!btDeviceSelectionDialog) {
        btDeviceSelectionDialog = new BtDeviceSelectionDialog(this);
+       connect(btDeviceSelectionDialog, SIGNAL(selectedRemoteDeviceSaved(QString)),
+               this, SLOT(saveRemoteBluetoothDevice(QString)));
     }
 
     btDeviceSelectionDialog->show();
+}
+
+void DownloadFromDCWidget::saveRemoteBluetoothDevice(QString deviceAddress)
+{
+    /* Make the selected Bluetooth device default */
+    ui.device->setCurrentText(deviceAddress);
 }
 
 void DownloadFromDCWidget::enableBluetoothMode(int state)
