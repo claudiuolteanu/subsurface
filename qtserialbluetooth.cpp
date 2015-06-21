@@ -1,4 +1,16 @@
 #include "qtserialbluetooth.h"
+#include <QtBluetooth/QBluetoothAddress>
+#include <QtBluetooth/QBluetoothSocket>
+
+typedef struct serial_t {
+	/* Library context. */
+	dc_context_t *context;
+	/*
+	 * The file descriptor corresponding to the serial port.
+	 */
+	QBluetoothSocket *socket;
+	long timeout;
+} serial_t;
 
 static int qt_serial_open(serial_t **out, dc_context_t *context, const char* devaddr)
 {
