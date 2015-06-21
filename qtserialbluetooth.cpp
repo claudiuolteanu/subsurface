@@ -1,7 +1,9 @@
-#include "qtserialbluetooth.h"
+#include <libdivecomputer/custom_serial.h>
+
 #include <QtBluetooth/QBluetoothAddress>
 #include <QtBluetooth/QBluetoothSocket>
 
+extern "C" {
 typedef struct serial_t {
 	/* Library context. */
 	dc_context_t *context;
@@ -59,27 +61,23 @@ static int qt_serial_close(serial_t *device)
 
 static int qt_serial_read(serial_t *device, void* data, unsigned int size)
 {
-	if (device == NULL || device->socket)
+	if (device == NULL || device->socket == NULL)
 		return DC_STATUS_INVALIDARGS;
 
-	device->socket->read((char *)data, size);
-
-	return 0;
+	return device->socket->read((char *)data, size);
 }
 
 static int qt_serial_write(serial_t *device, const void* data, unsigned int size)
 {
-	if (device == NULL || device->socket)
+	if (device == NULL || device->socket == NULL)
 		return DC_STATUS_INVALIDARGS;
 
-	device->socket->write((char *)data, size);
-
-	return 0;
+	return device->socket->write((char *)data, size);
 }
 
 static int qt_serial_flush(serial_t *device, int queue)
 {
-	if (device == NULL || device->socket)
+	if (device == NULL || device->socket == NULL)
 		return DC_STATUS_INVALIDARGS;
 
 	//TODO: add implementation
@@ -89,7 +87,7 @@ static int qt_serial_flush(serial_t *device, int queue)
 
 static int qt_serial_get_received(serial_t *device)
 {
-	if (device == NULL || device->socket)
+	if (device == NULL || device->socket == NULL)
 		return DC_STATUS_INVALIDARGS;
 
 	return device->socket->bytesAvailable();
@@ -97,7 +95,7 @@ static int qt_serial_get_received(serial_t *device)
 
 static int qt_serial_get_transmitted(serial_t *device)
 {
-	if (device == NULL || device->socket)
+	if (device == NULL || device->socket == NULL)
 		return DC_STATUS_INVALIDARGS;
 
 	return device->socket->bytesToWrite();
@@ -146,4 +144,5 @@ dc_status_t dc_serial_qt_open(dc_serial_t **out, dc_context_t *context, const ch
 	*out = serial_device;
 
 	return DC_STATUS_SUCCESS;
+}
 }
