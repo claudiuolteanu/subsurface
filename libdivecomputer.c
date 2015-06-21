@@ -923,7 +923,7 @@ const char *do_libdivecomputer_import(device_data_t *data)
 			report_error(errmsg(rc));
 		}
 
-		rc = dc_device_open2(&data->device, data->context, data->descriptor, serial_device);
+		rc = dc_device_custom_open(&data->device, data->context, data->descriptor, serial_device);
 	} else {
 		rc = dc_device_open(&data->device, data->context, data->descriptor, data->devname);
 	}
