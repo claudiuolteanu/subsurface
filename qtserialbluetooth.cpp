@@ -1,38 +1,94 @@
 #include "qtserialbluetooth.h"
 
-static int qt_serial_open(serial_t **device, dc_context_t *context, const char* devaddr)
+static int qt_serial_open(serial_t **out, dc_context_t *context, const char* devaddr)
 {
-	return 0;
+	if (out == NULL)
+		return DC_STATUS_INVALIDARGS;
+
+	// Allocate memory.
+	serial_t *device = (serial_t *) malloc (sizeof (serial_t));
+	if (device == NULL) {
+		return DC_STATUS_NOMEMORY;
+	}
+
+	// Library context.
+	device->context = context;
+
+	// Default to blocking reads.
+	device->timeout = -1;
+
+	// TODO: wait for connection completion
+	device->socket = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol);
+	device->socket->connectToService(QBluetoothAddress(devaddr), QBluetoothUuid::SerialPort);
+
+
+	if (device->socket->socketDescriptor() == -1) {
+		free (device);
+		return DC_STATUS_IO;
+	}
+
+	*out = device;
+
+	return DC_STATUS_SUCCESS;
 }
 
 static int qt_serial_close(serial_t *device)
 {
-	return 0;
+	if (device == NULL || device->socket == NULL)
+		return DC_STATUS_SUCCESS;
+
+	device->socket->close();
+
+	delete device->socket;
+	free(device);
+
+	return DC_STATUS_SUCCESS;
 }
 
 static int qt_serial_read(serial_t *device, void* data, unsigned int size)
 {
+	if (device == NULL || device->socket)
+		return DC_STATUS_INVALIDARGS;
+
+	device->socket->read((char *)data, size);
+
 	return 0;
 }
 
 static int qt_serial_write(serial_t *device, const void* data, unsigned int size)
 {
+	if (device == NULL || device->socket)
+		return DC_STATUS_INVALIDARGS;
+
+	device->socket->write((char *)data, size);
+
 	return 0;
 }
 
 static int qt_serial_flush(serial_t *device, int queue)
 {
-	return 0;
+	if (device == NULL || device->socket)
+		return DC_STATUS_INVALIDARGS;
+
+	//TODO: add implementation
+
+	return DC_STATUS_SUCCESS;
 }
 
 static int qt_serial_get_received(serial_t *device)
 {
-	return 0;
+	if (device == NULL || device->socket)
+		return DC_STATUS_INVALIDARGS;
+
+	return device->socket->bytesAvailable();
 }
 
 static int qt_serial_get_transmitted(serial_t *device)
 {
-	return 0;
+	if (device == NULL || device->socket)
+		return DC_STATUS_INVALIDARGS;
+
+	return device->socket->bytesToWrite();
 }
 
 
