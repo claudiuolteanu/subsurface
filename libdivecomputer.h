@@ -8,6 +8,7 @@
 #include <libdivecomputer/parser.h>
 
 #include "dive.h"
+#include "qtserialbluetooth.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,6 +40,7 @@ typedef struct device_data_t
 	bool libdc_dump;
 	FILE *libdc_logfile;
 	struct dive_table *download_table;
+	int bluetoothMode;
 } device_data_t;
 
 const char *errmsg (dc_status_t rc);
