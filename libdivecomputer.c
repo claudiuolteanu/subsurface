@@ -914,7 +914,20 @@ const char *do_libdivecomputer_import(device_data_t *data)
 	}
 
 	err = translate("gettextFromC", "Unable to open %s %s (%s)");
-	rc = dc_device_open(&data->device, data->context, data->descriptor, data->devname);
+
+	if (data->bluetoothMode) {
+		dc_serial_t *serial_device;
+
+		rc = dc_serial_qt_open(&serial_device, data->context, data->descriptor, data->devname);
+		if (rc != DC_STATUS_SUCCESS) {
+			report_error(errmsg(rc));
+		}
+
+		rc = dc_device_open2(&data->device, data->context, data->descriptor, serial_device);
+	} else {
+		rc = dc_device_open(&data->device, data->context, data->descriptor, data->devname);
+	}
+
 	if (rc == DC_STATUS_SUCCESS) {
 		err = do_device_import(data);
 		/* TODO: Show the logfile to the user on error. */
