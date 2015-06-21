@@ -329,6 +329,7 @@ void DownloadFromDCWidget::on_downloadCancelRetryButton_clicked()
 	data.create_new_trip = ui.createNewTrip->isChecked();
 	data.trip = NULL;
 	data.deviceid = data.diveid = 0;
+	data.bluetoothMode = ui.bluetoothMode->isChecked();
 	set_default_dive_computer(data.vendor, data.product);
 	set_default_dive_computer_device(data.devname);
 
