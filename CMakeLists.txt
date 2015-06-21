@@ -278,6 +278,7 @@ set(SUBSURFACE_CORE_LIB_SRCS
 	windowtitleupdate.cpp
 	divelogexportlogic.cpp
 	qt-init.cpp
+	qtserialbluetooth.cpp
 	${SUBSURFACE_PRINTING_SRCS}
 	${PLATFORM_SRC}
 )

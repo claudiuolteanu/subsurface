@@ -7,7 +7,7 @@ QT = core gui network svg
 lessThan(QT_MAJOR_VERSION, 5) {
 	QT += webkit
 } else {
-        QT += printsupport concurrent bluetooth
+	QT += printsupport concurrent bluetooth
 	!android: QT += webkitwidgets webkit
 	android: QT += androidextras
 }
@@ -116,7 +116,8 @@ HEADERS = \
 	qt-ui/diveshareexportdialog.h \
 	qt-ui/filtermodels.h \
 	qt-ui/undocommands.h \
-        qt-ui/notificationwidget.h
+        qt-ui/notificationwidget.h \
+	qtserialbluetooth.h
 
 android: HEADERS -= \
 	qt-ui/usermanual.h \
@@ -220,7 +221,8 @@ SOURCES =  \
 	qt-ui/filtermodels.cpp \
 	qt-ui/undocommands.cpp \
 	qt-ui/notificationwidget.cpp \
-        ostctools.c
+        ostctools.c \
+	qtserialbluetooth.cpp
 
 android: SOURCES += android.cpp
 else: win32: SOURCES += windows.c

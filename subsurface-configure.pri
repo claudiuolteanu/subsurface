@@ -199,3 +199,9 @@ MOC_DIR = .moc
 UI_DIR = .uic
 RCC_DIR = .rcc
 OBJECTS_DIR = .obj
+
+HEADERS += \
+    $$PWD/qtserialbluetooth.h
+
+SOURCES += \
+    $$PWD/qtserialbluetooth.cpp
