@@ -918,7 +918,7 @@ const char *do_libdivecomputer_import(device_data_t *data)
 	if (data->bluetoothMode) {
 		dc_serial_t *serial_device;
 
-		rc = dc_serial_qt_open(&serial_device, data->context, data->descriptor, data->devname);
+		rc = dc_serial_qt_open(&serial_device, data->context, data->devname);
 		if (rc != DC_STATUS_SUCCESS) {
 			report_error(errmsg(rc));
 		}
