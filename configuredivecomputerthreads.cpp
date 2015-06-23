@@ -1,7 +1,6 @@
 #include "configuredivecomputerthreads.h"
 #include "libdivecomputer/hw.h"
 #include "libdivecomputer.h"
-#include "qtserialbluetooth.h"
 #include <QDateTime>
 #include <QStringList>
 

@@ -8,7 +8,6 @@
 #include <libdivecomputer/parser.h>
 
 #include "dive.h"
-#include "qtserialbluetooth.h"
 
 #ifdef __cplusplus
 extern "C" {
