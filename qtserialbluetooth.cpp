@@ -88,7 +88,30 @@ static int qt_serial_read(serial_t *device, void* data, unsigned int size)
 	if (device == NULL || device->socket == NULL)
 		return DC_STATUS_INVALIDARGS;
 
-	return device->socket->read((char *)data, size);
+	unsigned int nbytes = 0, rc;
+
+	while(nbytes < size)
+	{
+		device->socket->waitForReadyRead(device->timeout);
+
+		rc = device->socket->read((char *) data + nbytes, size - nbytes);
+
+		if (rc < 0) {
+			if (errno == EINTR)
+			    continue; // Retry.
+
+			return -1; // Something really bad happened :-(
+		} else if (rc == 0) {
+			// Wait until the device is available for read operations
+			QEventLoop loop;
+			loop.connect(device->socket, SIGNAL(readyRead()), SLOT(quit()));
+			loop.exec();
+		}
+
+		nbytes += rc;
+	}
+
+	return nbytes;
 }
 
 static int qt_serial_write(serial_t *device, const void* data, unsigned int size)
