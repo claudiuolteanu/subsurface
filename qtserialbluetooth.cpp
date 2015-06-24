@@ -119,7 +119,27 @@ static int qt_serial_write(serial_t *device, const void* data, unsigned int size
 	if (device == NULL || device->socket == NULL)
 		return DC_STATUS_INVALIDARGS;
 
-	return device->socket->write((char *)data, size);
+	unsigned int nbytes = 0, rc;
+
+	while(nbytes < size)
+	{
+		device->socket->waitForBytesWritten(device->timeout);
+
+		rc = device->socket->write((char *) data + nbytes, size - nbytes);
+
+		if (rc < 0) {
+			if (errno == EINTR || errno == EAGAIN)
+			    continue; // Retry.
+
+			return -1; // Something really bad happened :-(
+		} else if (rc == 0) {
+			break;
+		}
+
+		nbytes += rc;
+	}
+
+	return nbytes;
 }
 
 static int qt_serial_flush(serial_t *device, int queue)
