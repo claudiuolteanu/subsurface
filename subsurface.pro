@@ -116,8 +116,7 @@ HEADERS = \
 	qt-ui/diveshareexportdialog.h \
 	qt-ui/filtermodels.h \
 	qt-ui/undocommands.h \
-        qt-ui/notificationwidget.h \
-	qtserialbluetooth.h
+        qt-ui/notificationwidget.h
 
 android: HEADERS -= \
 	qt-ui/usermanual.h \
