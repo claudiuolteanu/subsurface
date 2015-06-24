@@ -1,7 +1,10 @@
-#include <libdivecomputer/custom_serial.h>
+#include <errno.h>
 
 #include <QtBluetooth/QBluetoothAddress>
 #include <QtBluetooth/QBluetoothSocket>
+#include <QEventLoop>
+
+#include <libdivecomputer/custom_serial.h>
 
 extern "C" {
 typedef struct serial_t {
@@ -31,14 +34,20 @@ static int qt_serial_open(serial_t **out, dc_context_t *context, const char* dev
 	// Default to blocking reads.
 	device->timeout = -1;
 
-	// TODO: wait for connection completion
+	// Create a RFCOMM socket
 	device->socket = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol);
-	device->socket->connectToService(QBluetoothAddress(devaddr), QBluetoothUuid::SerialPort);
 
+	// Wait until the connection succeeds or until an error occurs
+	QEventLoop loop;
+	loop.connect(device->socket, SIGNAL(connected()), SLOT(quit()));
+	loop.connect(device->socket, SIGNAL(error(QBluetoothSocket::SocketError)), SLOT(quit()));
+	// Try to connect to the Serial Port Profile service
+	device->socket->connectToService(QBluetoothAddress(devaddr), QBluetoothUuid::SerialPort);
+	loop.exec();
 
 	if (device->socket->socketDescriptor() == -1) {
 		free (device);
-		return DC_STATUS_IO;
+		return -1;
 	}
 
 	*out = device;
