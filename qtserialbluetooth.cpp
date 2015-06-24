@@ -47,7 +47,22 @@ static int qt_serial_open(serial_t **out, dc_context_t *context, const char* dev
 
 	if (device->socket->socketDescriptor() == -1) {
 		free (device);
-		return -1;
+
+		// Get the latest error and try to match it with one from libdivecomputer
+		QBluetoothSocket::SocketError err = device->socket->error();
+		switch(err) {
+		case QBluetoothSocket::HostNotFoundError:
+		case QBluetoothSocket::ServiceNotFoundError:
+			return DC_STATUS_NODEVICE;
+		case QBluetoothSocket::UnsupportedProtocolError:
+			return DC_STATUS_PROTOCOL;
+		case QBluetoothSocket::OperationError:
+			return DC_STATUS_UNSUPPORTED;
+		case QBluetoothSocket::NetworkError:
+			return DC_STATUS_IO;
+		default:
+			return QBluetoothSocket::UnknownSocketError;
+		}
 	}
 
 	*out = device;
