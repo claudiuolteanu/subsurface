@@ -919,13 +919,17 @@ const char *do_libdivecomputer_import(device_data_t *data)
 		dc_serial_t *serial_device;
 
 		rc = dc_serial_qt_open(&serial_device, data->context, data->devname);
-		if (rc != DC_STATUS_SUCCESS) {
+		if (rc == DC_STATUS_SUCCESS) {
+			rc = dc_device_custom_open(&data->device, data->context, data->descriptor, serial_device);
+		} else {
 			report_error(errmsg(rc));
 		}
 
-		rc = dc_device_custom_open(&data->device, data->context, data->descriptor, serial_device);
 	} else {
 		rc = dc_device_open(&data->device, data->context, data->descriptor, data->devname);
+
+		if (rc != DC_STATUS_SUCCESS && subsurface_access(data->devname, R_OK | W_OK) != 0)
+			err = translate("gettextFromC", "Insufficient privileges to open the device %s %s (%s)");
 	}
 
 	if (rc == DC_STATUS_SUCCESS) {
@@ -933,8 +937,7 @@ const char *do_libdivecomputer_import(device_data_t *data)
 		/* TODO: Show the logfile to the user on error. */
 		dc_device_close(data->device);
 		data->device = NULL;
-	} else if (subsurface_access(data->devname, R_OK | W_OK) != 0)
-		err = translate("gettextFromC", "Insufficient privileges to open the device %s %s (%s)");
+	}
 
 	dc_context_free(data->context);
 	data->context = NULL;
