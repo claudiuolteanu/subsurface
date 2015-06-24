@@ -11,7 +11,7 @@ typedef struct serial_t {
 	/* Library context. */
 	dc_context_t *context;
 	/*
-	 * The file descriptor corresponding to the serial port.
+	 * RFCOMM socket used for Bluetooth Serial communication.
 	 */
 	QBluetoothSocket *socket;
 	long timeout;
