@@ -447,7 +447,21 @@ void BtDeviceSelectionDialog::initializeDeviceDiscoveryAgent()
 #if defined(Q_OS_WIN)
 static QString getLastErrorAsString()
 {
-	// TODO get the last error
+	LPVOID lpMsgBuf = NULL;
+	DWORD lastError = GetLastError();
+
+	if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+			  NULL,
+			  lastError,
+			  0,
+			  (LPTSTR) &lpMsgBuf,
+			  0,NULL)) {
+		return QString((char *)lpMsgBuf);
+	} else {
+		qDebug() << "Failed to format the message for the last error! Error number : " << lastError;
+	}
+
+	return QString("Unknown error");
 }
 
 WinBluetoothDeviceDiscoveryAgent::WinBluetoothDeviceDiscoveryAgent(QObject *parent) : QThread(parent)
