@@ -226,7 +226,11 @@ void BtDeviceSelectionDialog::addRemoteDevice(const QBluetoothDeviceInfo &remote
 void BtDeviceSelectionDialog::itemClicked(QListWidgetItem *item)
 {
 #if defined(Q_OS_WIN)
-	// TODO enable the save button and log the information about the selected item
+	QBluetoothDeviceInfo remoteDeviceInfo = item->data(Qt::UserRole).value<QBluetoothDeviceInfo>();
+
+	ui->dialogStatus->setText(QString("The device %1 can be used for connection. You can press the Save button.")
+				  .arg(remoteDeviceInfo.address().toString()));
+	ui->save->setEnabled(true);
 #else
 	QBluetoothDeviceInfo remoteDeviceInfo = item->data(Qt::UserRole).value<QBluetoothDeviceInfo>();
 	QBluetoothLocalDevice::Pairing pairingStatus = localDevice->pairingStatus(remoteDeviceInfo.address());
