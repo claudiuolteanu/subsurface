@@ -192,7 +192,12 @@ void BtDeviceSelectionDialog::hostModeStateChanged(QBluetoothLocalDevice::HostMo
 void BtDeviceSelectionDialog::addRemoteDevice(const QBluetoothDeviceInfo &remoteDeviceInfo)
 {
 #if defined(Q_OS_WIN)
-	// TODO add the remote device
+	QString deviceLabel = QString("%1 (%2)").arg(remoteDeviceInfo.name(),
+						     remoteDeviceInfo.address().toString());
+	QListWidgetItem *item = new QListWidgetItem(deviceLabel);
+
+	item->setData(Qt::UserRole, QVariant::fromValue(remoteDeviceInfo));
+	ui->discoveredDevicesList->addItem(item);
 #else
 	QColor pairingColor = QColor(Qt::red);
 	QString pairingStatusLabel = QString("UNPAIRED");
